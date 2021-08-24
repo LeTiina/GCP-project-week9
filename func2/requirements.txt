@@ -1,0 +1,3 @@
+# This file tells Python which modules it needs to import
+SQLAlchemy==1.3.12      
+pg8000==1.13.2
