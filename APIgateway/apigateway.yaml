@@ -8,15 +8,15 @@ schemes:
 produces:
   - application/json
 paths:
-  /weather1NEED TO FILL!!!:
+  /index-rain:
   get:
-    summary: get what results we get NEED TO FILL!!!
-    operationId: NEED TO FILL
+    summary: json with index to rain amounts
+    operationId: index-rain
     x-google-backend:
       address: https://us-central1-week9-1-323806.cloudfunctions.net/NEEDTOFILL!!!
-  /weather2NEED TO FILL!!!:
+  /index-temperature:
   get:
-    summary: get what results we get NEED TO FILL!!!
-    operationId: NEED TO FILL
+    summary: json with index to max temperature
+    operationId: index-maxtemperature
     x-google-backend:
       address: https://us-central1-week9-1-323806.cloudfunctions.net/NEEDTOFILL!!!
