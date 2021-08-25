@@ -4,8 +4,8 @@ import decimal, datetime
 
 #Connection info for the database
 connection_name = "" #Connection name from the details page of the SQL instance
-table_name = "stockinfo" #The name of the table in the database
-db_name = "helsinkistock" #The name of our database
+table_name = "" #The name of the table in the database
+db_name = "" #The name of our database
 db_user = "postgres"
 db_password = "" #Password for the postgres database
 
@@ -22,7 +22,7 @@ def alchemyencoder(obj):
 #Function 1 - selecting the stock info and the temperature
 def select_temp(request):
 
-    stmt = sqlalchemy.text("SELECT date, index, maxTemperature FROM {} ORDER BY maxTemperature".format(table_name))
+    stmt = sqlalchemy.text("SELECT AVG(close), date, 'Maximum_Temperature' FROM {} GROUP BY date, 'Maximum_Temperature' ORDER BY date LIMIT 10;".format(table_name))
     
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
@@ -47,7 +47,7 @@ def select_temp(request):
 #Function 2 - selecting the stock info and rain(mm)
 def select_rain(request):
 
-    stmt = sqlalchemy.text("SELECT date, index, rain FROM {} ORDER BY rain".format(table_name))
+    stmt = sqlalchemy.text("SELECT AVG(close), date, 'Precipitation' FROM {} GROUP BY date, 'Precipitation' ORDER BY date LIMIT 10;".format(table_name))
     
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
