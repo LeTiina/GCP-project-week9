@@ -1,0 +1,30 @@
+- init:
+    assign:
+    - project: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+    - topic: "errors"
+    - subscription: "errors-sub"
+    - base64Data: "RVJST1I="  # Some random base64 data.
+- datatobucket:
+    try:
+      call: http.get
+      args:
+        url: https://us-central1-week9-1-323806.cloudfunctions.net/week9-1-function2
+      result: databucketResult
+    next: success
+    except:
+      as: e
+      steps:
+        - unhandled_exception:
+            next: publish_message_to_topic
+- publish_message_to_topic:
+    call: googleapis.pubsub.v1.projects.topics.publish
+    args:
+      topic: ${"projects/" + project + "/topics/" + topic}
+      body:
+        messages:
+        - data: ${base64Data}
+    next: fail
+- success:
+    return: 'SUCCESS'
+- fail:
+    return: 'FAIL'
