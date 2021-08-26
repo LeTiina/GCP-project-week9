@@ -19,10 +19,10 @@ def alchemyencoder(obj):
     elif isinstance(obj, decimal.Decimal):
         return float(obj)
 
-#Function 1 - selecting the stock info and the temperature
+#Function 1 - selecting all the values from the database
 def select_temp(request):
 
-    stmt = sqlalchemy.text("SELECT AVG(close), date, 'Maximum_Temperature' FROM {} GROUP BY date, 'Maximum_Temperature' ORDER BY date LIMIT 10;".format(table_name))
+    stmt = sqlalchemy.text("SELECT * FROM {}".format(table_name))
     
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
@@ -40,6 +40,7 @@ def select_temp(request):
     try:
         with db.connect() as conn:
           res = conn.execute(stmt)
+          #Formats the object returned by SQLAlchemy as JSON using the encoder for floats and date values
           return json.dumps([dict(r) for r in res], default=alchemyencoder)
     except Exception as e:
         return 'Error: {}'.format(str(e))
@@ -47,7 +48,7 @@ def select_temp(request):
 #Function 2 - selecting the stock info and rain(mm)
 def select_rain(request):
 
-    stmt = sqlalchemy.text("SELECT AVG(close), date, 'Precipitation' FROM {} GROUP BY date, 'Precipitation' ORDER BY date LIMIT 10;".format(table_name))
+    stmt = sqlalchemy.text("SELECT date, index, precipitation FROM {}".format(table_name))
     
     db = sqlalchemy.create_engine(
       sqlalchemy.engine.url.URL(
